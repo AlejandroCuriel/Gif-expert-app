@@ -1,29 +1,35 @@
 import { useState } from "react"
-
+import { AddCategory } from "./components/AddCategory";
+import Swal from 'sweetalert2'
+import 'sweetalert2/dist/sweetalert2.css'
+import { GifGrid } from "./components/GifGrid";
 export const GifExpertApp = () => {
 
-  const [category, setCategory] = useState([ 'One Punch', 'Dragon Ball']);
-  console.log(category)
+  const [category, setCategory] = useState([ 'One Punch']);
 
-  const onAddCategory = () =>{
-    console.log("Overlord")
-    setCategory(['Overlord', ...category]);
+  const onAddCategory = (newCategory) => {
+    if(category.includes(newCategory)){
+      Swal.fire({
+        title: 'Error!',
+        text: `La categoria ${newCategory} ya se encuentra registradas`,
+        icon: 'error',
+        confirmButtonText: 'Cool'
+      })
+      return
+    }
+    setCategory([...category, newCategory]);
   }
+
   return (
-    <> {/* Fragmento*/}
-      {/* Titulo */}
-      <h1>!...!</h1>
-
-      {/* Buscador*/}
-
-      {/* Listado de Gif */}
-      <button onClick={ onAddCategory }>Add Category</button>
-      <ol>
-        {category.map( category => {
-          return <li key={ category } > { category } </li>
-        })}
-      </ol>
-        {/* Gif Item */}
+    <>
+      <h1>GifExpertApp</h1>
+      <AddCategory
+        onNewCategory={onAddCategory} />
+        {category.map( category => (
+          <GifGrid
+            key = {category}
+            category={category} />
+        ))}
     </>
   )
 }
